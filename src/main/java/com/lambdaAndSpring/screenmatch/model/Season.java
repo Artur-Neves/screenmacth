@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,8 +19,8 @@ import jakarta.persistence.OneToMany;
 public class Season {
 	  @Id 
 	  @GeneratedValue(strategy = GenerationType.IDENTITY)
-	  private Integer id;
-	  @OneToMany(mappedBy = "season", cascade = CascadeType.PERSIST)
+	  private Long id;
+	  @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	  private List<Episodes> episodies = new ArrayList<>();
 	  @ManyToOne()
 	  @JoinColumn(name = "serie_id")
@@ -46,11 +47,11 @@ public class Season {
 	}
 
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

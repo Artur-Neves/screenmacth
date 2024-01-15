@@ -2,6 +2,7 @@ package com.lambdaAndSpring.screenmatch.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,8 @@ import com.lambdaAndSpring.screenmatch.model.Season;
 import com.lambdaAndSpring.screenmatch.model.SeasonR;
 import com.lambdaAndSpring.screenmatch.model.Series;
 import com.lambdaAndSpring.screenmatch.model.SeriesR;
-import com.lambdaAndSpring.screenmatch.model.repositories.SeasonRepository;
-import com.lambdaAndSpring.screenmatch.model.repositories.SeriesRepository;
+import com.lambdaAndSpring.screenmatch.repository.SeasonRepository;
+import com.lambdaAndSpring.screenmatch.repository.SeriesRepository;
 import com.lambdaAndSpring.screenmatch.service.ApiCall;
 import com.lambdaAndSpring.screenmatch.service.Datas;
 
@@ -70,20 +71,16 @@ public class Seriesresouces {
 	}
 	
 	private void findSerie() {
-	Series serie = findEpisodieForSerie();
-	listSeries.add(serie);
+	Series serie =  getDataSerie();
+	repository.save(serie);
 	System.out.println(serie);
 	}
 	private Series getDataSerie() {
 		System.out.println("Digite o nome de uma série que deseja assistir");
 		String serieName = s.nextLine().replace(" ", "+");
 	    json =api.getData(ADDRESS+serieName+API_KEY);
-		return new Series( datas.getDatas(json, SeriesR.class));
-	}
-		
-		private Series findEpisodieForSerie() {
-	    serie = getDataSerie();
-		List<Season> seansos = new ArrayList<>();
+	    serie = new Series( datas.getDatas(json, SeriesR.class));
+	    List<Season> seansos = new ArrayList<>();
 		for (int i =1; i<=serie.getSesons(); i++) {
 			json = api.getData(ADDRESS+serie.getTitle().replace(" ", "+")+SEASON+i+API_KEY);
 			seansos.add(new Season(serie, datas.getDatas(json, SeasonR.class)));
@@ -92,8 +89,24 @@ public class Seriesresouces {
 		serie.getSeasons().addAll(seansos);
 		return serie;
 	}
+		
+		private void findEpisodieForSerie() {
+			listSeries = repository.findAll();
+			System.out.println("Digite o nome de uma serie");
+			String serieName = s.nextLine().trim();
+			Optional<Series> seriesoptional = listSeries.stream().filter(u -> u.getTitle().toLowerCase().contains(serieName.toLowerCase().trim())).findFirst();
+	        if (seriesoptional.isPresent()) {
+	        	seriesoptional.get().getSeasons().stream().flatMap(u -> u.getEpisodies().stream()).forEach(System.out::println);
+	        }
+	        else {
+	        	System.out.println("Serie não encontrada!");
+	        }
+			
+			
+		}
 		private void listSeries() {
-			repository.save(serie);
+			listSeries = repository.findAll();
+			listSeries.get(0).getSeasons();
 			listSeries.forEach(System.out::println);
 		}
 
