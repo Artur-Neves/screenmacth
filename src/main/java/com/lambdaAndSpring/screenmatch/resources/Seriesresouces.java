@@ -30,11 +30,15 @@ public class Seriesresouces {
 	Datas datas = new Datas();
 	Series serie;
 	List<Series> listSeries = new ArrayList<>();
-	@Autowired
+	
 	private SeriesRepository repository;
 	@Autowired
 	private SeasonRepository repositoryseanso;
 	
+	public Seriesresouces(SeriesRepository serieRepository) {
+		repository = serieRepository;
+	}
+
 	public void showMenu() {
 		Integer optional =-1;
 		while(optional!=0) {
@@ -42,6 +46,9 @@ public class Seriesresouces {
 	                1 - Buscar séries
 	                2 - Buscar episódios
 	                3 - Listar séries
+	                4 - Procurar séries pelo título
+	                5 - Procurar series pelo autor
+	                6 - Top 5 series
 	                0 - Sair                                 
 	                """;
 
@@ -59,6 +66,15 @@ public class Seriesresouces {
 	            case 3:
 	            	listSeries();
 	                break;
+	            case 4:
+	            	listForTitle();
+	            	break;
+	            case 5:
+	            	listSeriesForAuthor();
+	            	break;
+	            case 6:
+	            	listTop5Series();
+	            	break;
 	            case 0:
 	                System.out.println("Saindo...");
 	                break;
@@ -70,6 +86,7 @@ public class Seriesresouces {
 		
 	}
 	
+
 	private void findSerie() {
 	Series serie =  getDataSerie();
 	repository.save(serie);
@@ -90,24 +107,44 @@ public class Seriesresouces {
 		return serie;
 	}
 		
-		private void findEpisodieForSerie() {
-			listSeries = repository.findAll();
-			System.out.println("Digite o nome de uma serie");
-			String serieName = s.nextLine().trim();
-			Optional<Series> seriesoptional = listSeries.stream().filter(u -> u.getTitle().toLowerCase().contains(serieName.toLowerCase().trim())).findFirst();
-	        if (seriesoptional.isPresent()) {
-	        	seriesoptional.get().getSeasons().stream().flatMap(u -> u.getEpisodies().stream()).forEach(System.out::println);
-	        }
-	        else {
-	        	System.out.println("Serie não encontrada!");
-	        }
-			
-			
+	private Series findEpisodieForSerie() {
+	    serie = getDataSerie();
+		List<Season> seansos = new ArrayList<>();
+		for (int i =1; i<=serie.getSesons(); i++) {
+			json = api.getData(ADDRESS+serie.getTitle().replace(" ", "+")+SEASON+i+API_KEY);
+			seansos.add(new Season(serie, datas.getDatas(json, SeasonR.class)));
+			System.out.println();
 		}
+		serie.getSeasons().addAll(seansos);
+		return serie;
+	}
 		private void listSeries() {
 			listSeries = repository.findAll();
-			listSeries.get(0).getSeasons();
 			listSeries.forEach(System.out::println);
 		}
-
+		private void listForTitle() {
+			System.out.println("Digite o nome de uma série que deseja assistir");
+			var serieTitle = s.nextLine();
+		 Optional<Series> serieOptional = repository.findFirstByTitleContainingIgnoreCase(serieTitle);
+		 System.out.println((serieOptional.isPresent()) ? "Os dados da serie são"+ serieOptional.get(): "serie não encontrada");
+		}
+		private void listSeriesForAuthor() {
+			System.out.println("Digite o nome de um autor");
+			String name = s.nextLine();
+			List<Series> seriesForAuthor = repository.findByActorsContainingIgnoreCaseAndAvaliationGreaterThan(name, 8.5);
+			seriesForAuthor.forEach(u -> System.out.println(
+					"title: "+ u.getTitle()+
+					" nota: "+u.getAvaliation()
+					));
+			
+			
+		}
+		private void listTop5Series() {
+			System.out.println("Os top 5 filmes da tua lista");
+		List<Series> listTop5 = repository.findTop5ByOrderByAvaliationDesc();
+		listTop5.forEach(u -> System.out.println(
+				"title: "+ u.getTitle()+
+				" nota: "+u.getAvaliation()
+				));
+		}
 	}

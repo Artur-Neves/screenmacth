@@ -5,7 +5,9 @@ public enum Categorys {
 	COMEDIA ("Comedy"),
 	ROMANCE ("Romance"),
 	DRAMA ("Drama"),
-	CRIME ("Crime");
+	CRIME ("Crime"),
+	CURTO ("Short"),
+	ANIMACAO ("Animation");
 	private String categoryOmdb;
 
 	private Categorys(String categoryOmdb) {

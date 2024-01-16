@@ -1,5 +1,6 @@
 package com.lambdaAndSpring.screenmatch.util;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -31,9 +32,8 @@ public class Utils {
 		}
 	}
 	
-	public static String formatLocalDate(LocalDate date) {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return ((date!=null) ? format.format(date): null) ;
-	}
+	
+	
+
 	
 }
