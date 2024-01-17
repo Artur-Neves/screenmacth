@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.lambdaAndSpring.screenmatch.enums.Categorys;
+import com.lambdaAndSpring.screenmatch.model.Episodes;
 import com.lambdaAndSpring.screenmatch.model.Season;
 import com.lambdaAndSpring.screenmatch.model.SeasonR;
 import com.lambdaAndSpring.screenmatch.model.Series;
 import com.lambdaAndSpring.screenmatch.model.SeriesR;
+import com.lambdaAndSpring.screenmatch.repository.EpisodesRepository;
 import com.lambdaAndSpring.screenmatch.repository.SeasonRepository;
 import com.lambdaAndSpring.screenmatch.repository.SeriesRepository;
 import com.lambdaAndSpring.screenmatch.service.ApiCall;
@@ -30,14 +33,12 @@ public class Seriesresouces {
 	Datas datas = new Datas();
 	Series serie;
 	List<Series> listSeries = new ArrayList<>();
-	
+	@Autowired	
 	private SeriesRepository repository;
 	@Autowired
 	private SeasonRepository repositoryseanso;
-	
-	public Seriesresouces(SeriesRepository serieRepository) {
-		repository = serieRepository;
-	}
+	@Autowired
+	private EpisodesRepository episodeRepository;
 
 	public void showMenu() {
 		Integer optional =-1;
@@ -49,6 +50,10 @@ public class Seriesresouces {
 	                4 - Procurar séries pelo título
 	                5 - Procurar series pelo autor
 	                6 - Top 5 series
+	                7 - Buscar por categoria
+	                8 - Buscar por temporadas e por avaliação
+	                9 - Buscar episódio por trecho
+	                10 - Top 5 episodio de alguma serie	                
 	                0 - Sair                                 
 	                """;
 
@@ -75,6 +80,18 @@ public class Seriesresouces {
 	            case 6:
 	            	listTop5Series();
 	            	break;
+	            case 7:
+	            	listForCategory();
+	            	break;
+	            case 8:
+	            	listForAvaliationAndSeasons();
+	            	break;
+	            case 9:
+	            	listEpisodesForTrecho();
+	            	break;
+	            case 10:
+	            	listTop5Episodes();
+	            	break;
 	            case 0:
 	                System.out.println("Saindo...");
 	                break;
@@ -86,6 +103,16 @@ public class Seriesresouces {
 		
 	}
 	
+
+	
+	
+
+
+
+
+
+
+
 
 	private void findSerie() {
 	Series serie =  getDataSerie();
@@ -122,11 +149,12 @@ public class Seriesresouces {
 			listSeries = repository.findAll();
 			listSeries.forEach(System.out::println);
 		}
-		private void listForTitle() {
+		private Optional<Series> listForTitle() {
 			System.out.println("Digite o nome de uma série que deseja assistir");
 			var serieTitle = s.nextLine();
 		 Optional<Series> serieOptional = repository.findFirstByTitleContainingIgnoreCase(serieTitle);
 		 System.out.println((serieOptional.isPresent()) ? "Os dados da serie são"+ serieOptional.get(): "serie não encontrada");
+		 return serieOptional;
 		}
 		private void listSeriesForAuthor() {
 			System.out.println("Digite o nome de um autor");
@@ -147,4 +175,44 @@ public class Seriesresouces {
 				" nota: "+u.getAvaliation()
 				));
 		}
+		
+		private void listForCategory() {
+		System.out.println("Digite o nome do gênero que deseja buscar");
+		String genre = s.nextLine();
+		List<Series> listForCategory =repository.findByGenre(Categorys.fromCategoryInPortugues(genre));
+		listForCategory.forEach(u ->  System.out.println("genêro: "+u.getGenre()+ "  Título: "+u.getTitle()));
+		}
+		
+		private void listForAvaliationAndSeasons() {
+			System.out.println("Digite a quantidade de temporadas m:");
+			Integer season = s.nextInt();
+			System.out.println("Digite o numero de avalições mínimas:");
+			Double avaliation = s.nextDouble();
+			List<Series> listForSeansonAndAvaliation = repository.findBySesonsLessThanEqualAndAvaliationGreaterThanEqual(season, avaliation);
+			listForSeansonAndAvaliation.stream().map(u -> u.getTitle()).forEach(System.out::println);
+		}
+		
+		private void listEpisodesForTrecho() {
+			System.out.println("Digite o trecho do titulo do episodio que deseja encontrar");
+			String excerpt = s.nextLine();
+			List<Episodes> listEpisodes = episodeRepository.listEpisodesContaing(excerpt);
+			listEpisodes.forEach(e ->
+            System.out.printf("Série: %s Temporada %s - Episódio %s - %s\n",
+                    e.getSeason().getSerie().getTitle(), e.getSeason().getNumber(),
+                    e.getNumber(), e.getTitle()));
+		}
+		
+		private void listTop5Episodes() {
+			Optional<Series> serie = listForTitle();
+			if (serie.isPresent()) {
+			
+			List<Episodes> listEpisodesTop5 = episodeRepository.listSomeEpisodes(serie.get());
+			listEpisodesTop5.forEach(e ->
+            System.out.printf("Série: %s Temporada %s - Episódio %s - Avaliation %s - %s\n",
+                    e.getSeason().getSerie().getTitle(), e.getSeason().getNumber(),
+                    e.getNumber(), e.getAvaliation(),  e.getTitle()));
+			}}
+
+
+
 	}

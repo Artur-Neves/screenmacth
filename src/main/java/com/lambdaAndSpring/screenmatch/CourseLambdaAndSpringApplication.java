@@ -21,14 +21,14 @@ import com.lambdaAndSpring.screenmatch.service.Datas;
 @SpringBootApplication
 public class CourseLambdaAndSpringApplication implements CommandLineRunner  {
 	@Autowired
-	SeriesRepository serieRepository;
+	Seriesresouces series;
 	public static void main(String[] args) {
 		SpringApplication.run(CourseLambdaAndSpringApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		Seriesresouces series = new Seriesresouces(serieRepository);
+		
 		series.showMenu();
 		
 	}
