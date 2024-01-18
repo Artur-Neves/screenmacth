@@ -53,7 +53,8 @@ public class Seriesresouces {
 	                7 - Buscar por categoria
 	                8 - Buscar por temporadas e por avaliação
 	                9 - Buscar episódio por trecho
-	                10 - Top 5 episodio de alguma serie	                
+	                10 - Top 5 episodio de alguma serie	  
+	                11 - buscar episodios por data de laçamento              
 	                0 - Sair                                 
 	                """;
 
@@ -92,6 +93,9 @@ public class Seriesresouces {
 	            case 10:
 	            	listTop5Episodes();
 	            	break;
+	            case 11:
+	            	listEpAfterAfterDate();
+	            	break;
 	            case 0:
 	                System.out.println("Saindo...");
 	                break;
@@ -103,15 +107,6 @@ public class Seriesresouces {
 		
 	}
 	
-
-	
-	
-
-
-
-
-
-
 
 
 	private void findSerie() {
@@ -212,7 +207,20 @@ public class Seriesresouces {
                     e.getSeason().getSerie().getTitle(), e.getSeason().getNumber(),
                     e.getNumber(), e.getAvaliation(),  e.getTitle()));
 			}}
-
+		
+		private void listEpAfterAfterDate() {
+			Optional<Series> serie = listForTitle();
+			if (serie.isPresent()) {
+				System.out.println("Digite o ano para saber os episodes que vinheream a partir dessa data");
+				Integer year = s.nextInt();
+				List<Episodes> listEpisodesForDate = episodeRepository.listForYear(serie, year);
+				listEpisodesForDate.forEach(e ->
+	            System.out.printf("Série: %s Temporada %s - Episódio %s - Avaliation %s - Data - %s\n",
+	                    e.getSeason().getSerie().getTitle(), e.getSeason().getNumber(),
+	                    e.getNumber(), e.getAvaliation(),e.getDataLancamento(), e.getTitle()));
+			}
+			
+		}
 
 
 	}

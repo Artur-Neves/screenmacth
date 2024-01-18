@@ -1,6 +1,7 @@
 package com.lambdaAndSpring.screenmatch.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,6 @@ public interface EpisodesRepository extends JpaRepository<Episodes, Long> {
 	List<Episodes> listEpisodesContaing(String trecho);
 	@Query("SELECT e FROM Episodes e WHERE e.season.serie = :series AND e.avaliation IS NOT NULL ORDER BY e.avaliation DESC LIMIT 5")
 	List<Episodes> listSomeEpisodes(Series series);
+	@Query("SELECT e FROM Episodes e WHERE e.season.serie = :serie AND YEAR(e.dataLancamento) >= :year")
+	List<Episodes> listForYear(Optional<Series> serie, Integer year);
 }
