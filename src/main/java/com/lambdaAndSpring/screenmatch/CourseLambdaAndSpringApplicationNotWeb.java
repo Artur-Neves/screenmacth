@@ -18,13 +18,19 @@ import com.lambdaAndSpring.screenmatch.service.ApiCall;
 import com.lambdaAndSpring.screenmatch.service.ConsultationGPT;
 import com.lambdaAndSpring.screenmatch.service.Datas;
 
-@SpringBootApplication
-public class CourseLambdaAndSpringApplication{
-	
-	public static void main(String[] args) {
-		SpringApplication.run(CourseLambdaAndSpringApplication.class, args);
-	}
-
-	
-
-}
+//@SpringBootApplication
+//public class CourseLambdaAndSpringApplicationNotWeb implements CommandLineRunner  {
+//	@Autowired
+//	Seriesresouces series;
+//	public static void main(String[] args) {
+//		SpringApplication.run(CourseLambdaAndSpringApplicationNotWeb.class, args);
+//	}
+//
+//	@Override
+//	public void run(String... args) throws Exception {
+//		
+//		series.showMenu();
+//		
+//	}
+//
+//}

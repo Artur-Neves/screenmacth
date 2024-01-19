@@ -1,6 +1,7 @@
 package com.lambdaAndSpring.screenmatch.model;
 
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,7 +21,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 @Entity
-public class Series {
+public class Series implements Serializable{
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

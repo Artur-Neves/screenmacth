@@ -1,5 +1,6 @@
 package com.lambdaAndSpring.screenmatch.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,8 +17,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Season {
-	  @Id 
+public class Season implements Serializable{
+	  private static final long serialVersionUID = 1L;
+	@Id 
 	  @GeneratedValue(strategy = GenerationType.IDENTITY)
 	  private Long id;
 	  @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
