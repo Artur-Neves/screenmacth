@@ -23,5 +23,6 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 	List<Series> findTop5ByOrderByAvaliationDesc();
 
 	List<Series> findByGenre(Categorys Categorys);
-
+	
+	List<Series> findTop5ByOrderBySeasonsEpisodiesDataLancamentoDesc();
 }
