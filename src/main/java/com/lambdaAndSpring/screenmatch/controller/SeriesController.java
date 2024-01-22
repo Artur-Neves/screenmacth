@@ -1,6 +1,7 @@
 package com.lambdaAndSpring.screenmatch.controller;
 
 import java.util.List;
+import java.util.Locale.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lambdaAndSpring.screenmatch.dto.EpisodesDTO;
 import com.lambdaAndSpring.screenmatch.dto.SeriesDTO;
-import com.lambdaAndSpring.screenmatch.model.Series;
 import com.lambdaAndSpring.screenmatch.service.SeriesService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -40,12 +39,21 @@ public class SeriesController {
 	}
 	@GetMapping("/{id}/temporadas/todas")
 	public List<EpisodesDTO> getEpisodesForSeries(@PathVariable Long id) {
-		return service.FindAllEpisodes(id);
+		return service.findAllEpisodes(id);
 	}
 	
 	@GetMapping("/{id}/temporadas/{season_id}")
 	public List<EpisodesDTO> getEpisodesForSeries(@PathVariable Long id, @PathVariable Long season_id) {
 		return service.findEpisodesForSeason(season_id, id);
+	}
+	
+	@GetMapping("/categoria/{categoria}")
+	public List<SeriesDTO> getSeriesForCategory(@PathVariable String categoria){
+		return service.findByCategory(categoria);
+	}
+	@GetMapping("/{id}/temporadas/top")
+	public List<EpisodesDTO> getTop5Episodes(@PathVariable Long id) {
+		return service.findTop5EpisodesForSeries(id);
 	}
 	
 	

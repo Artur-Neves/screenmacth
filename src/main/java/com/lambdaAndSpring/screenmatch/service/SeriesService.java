@@ -1,6 +1,7 @@
 package com.lambdaAndSpring.screenmatch.service;
 
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.lambdaAndSpring.screenmatch.dto.EpisodesDTO;
 import com.lambdaAndSpring.screenmatch.dto.SeriesDTO;
+import com.lambdaAndSpring.screenmatch.enums.Categorys;
 import com.lambdaAndSpring.screenmatch.model.Episodes;
 import com.lambdaAndSpring.screenmatch.model.Series;
 import com.lambdaAndSpring.screenmatch.repository.EpisodesRepository;
@@ -49,7 +51,7 @@ public class SeriesService {
 	         series.getSesons(),series.getGenre() ,series.getActors(), series.getPoster(), series.getPlot());
 	}
 
-	public List<EpisodesDTO> FindAllEpisodes(Long id) {
+	public List<EpisodesDTO> findAllEpisodes(Long id) {
 		return episodesRepository.findBySeasonSerieId(id).stream()
 				.map(e ->convertEpisodesDTO(e))
 				.collect(Collectors.toList());
@@ -61,6 +63,16 @@ public class SeriesService {
 	}
 	private EpisodesDTO convertEpisodesDTO(Episodes e) {
 		return new EpisodesDTO(e.getSeason().getNumber(), e.getNumber(), e.getTitle());
+	}
+
+	public List<SeriesDTO> findByCategory(String categoria) {
+		
+		return convertsData(repository.findByGenre(Categorys.fromCategoryInPortugues(categoria)));
+	}
+
+	public List<EpisodesDTO> findTop5EpisodesForSeries(Long id) {
+		return episodesRepository.listTop5Episodes(id).stream()
+				.map(e -> convertEpisodesDTO(e)).collect(Collectors.toList());
 	}
 
 }
