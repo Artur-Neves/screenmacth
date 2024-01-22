@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.lambdaAndSpring.screenmatch.enums.Categorys;
+import com.lambdaAndSpring.screenmatch.model.Episodes;
 import com.lambdaAndSpring.screenmatch.model.Series;
 @Repository
 public interface SeriesRepository extends JpaRepository<Series, Long> {
@@ -23,6 +24,12 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 	List<Series> findTop5ByOrderByAvaliationDesc();
 
 	List<Series> findByGenre(Categorys Categorys);
-	
+	@Query("SELECT s FROM Series s " +
+			"JOIN s.seasons se " +
+            "JOIN se.episodies e " +
+            "GROUP BY s " +
+            "ORDER BY MAX(e.dataLancamento) DESC LIMIT 5")
 	List<Series> findTop5ByOrderBySeasonsEpisodiesDataLancamentoDesc();
+	
+	
 }
