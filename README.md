@@ -32,3 +32,4 @@ As técnicas e tecnologias utilizadas no projeto foram:
 - Crie um banco de dados usando o PostgreSQL.
 - Atualize as informações desse banco de dados no arquivo "application.properties".
 - Finalmente, execute o projeto e o acesse pela porta 8080 no navegador da sua rede local.
+- Se desejar explorar o sistema com interface gráfica, acesse este [link](https://github.com/alura-cursos/3356-java-web-front). Vale ressaltar que este front-end não foi desenvolvido por mim, mas sim pela equipe de desenvolvimento da Alura.
