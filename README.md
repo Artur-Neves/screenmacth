@@ -12,9 +12,7 @@ O Sistema Screenmacth consiste em uma API desenvolvida para retonar dados de sé
 
 <div align="center">
   <h2>Assista o vídeo de demonstração do projeto</h2>
-    <a href="https://github.com/Artur-Neves/screenmacth/raw/main/ReviewScreenmacth.gif" target="_blank">
-    <img src="https://github.com/Artur-Neves/screenmacth/raw/main/ReviewScreenmacth.gif" alt="GiF ilustrativo" style="width: 800px; height: auto;">
-  </a>
+   
 
 </div>
   <br>
