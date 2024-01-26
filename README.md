@@ -10,7 +10,17 @@ O Sistema Screenmacth consiste em uma API desenvolvida para retonar dados de sé
 
 - **`Busca Personalizada de Séries`**: O sistema oferece uma variedade de opções de busca personalizada em sua base de dados, incluindo funcionalidades como identificar as cinco séries mais bem avaliadas, apresentar os cinco lançamentos mais recentes, buscar por categoria, encontrar os melhores episódios de uma série, entre outras opções.
 
+<div align="center">
+  <h2>Assista o vídeo de demonstração do projeto</h2>
 
+
+
+  ![GiF ilustrativo](https://github.com/Artur-Neves/screenmacth/ReviewScreenmacth.gif)
+
+  </div>
+  <br>
+  
+  
 ## ✔️ Técnicas e tecnologias utilizadas
 
 As técnicas e tecnologias utilizadas no projeto foram:
